@@ -1,0 +1,68 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/../bootstrap/app.php';
+
+use Illuminate\Support\Str;
+use splitbrain\phpcli\CLI;
+use splitbrain\phpcli\Options;
+
+class Console extends CLI
+{
+    protected function Setup(Options $options)
+    {
+        $options->setHelp('VSkeleton Logging Framework');
+
+        $options->registerOption('create', 'Create Access Key', null);
+        $options->registerOption('delete', 'Delete Access Key', null, 'key');
+    }
+
+    protected function main(Options $options)
+    {
+        if ($options->getOpt('create')) {
+            $key = Str::random(64);
+            $salt = Str::random(16);
+
+            $hasher = new SHA256Hasher();
+
+            AccessToken::query()->create(array(
+                'key' => substr($key, 0, 32),
+                'secret' => $hasher->make(substr($key, 32), ['salt' => $salt]),
+                'secret_salt' => $salt,
+                'permissions' => array('*'),
+                'whitelist_range' => array()
+            ));
+
+            $this->info('Your access key is created: ' . $key);
+        } else if ($options->getOpt('delete')) {
+            $token = $options->getOpt('delete');
+
+            if (empty($token)) {
+                $this->error('Please specify your access key to delete.');
+                return;
+            }
+
+            $hasher = new SHA256Hasher();
+
+            $accessKey = AccessToken::query()->where('key', substr($token, 0, 32))
+                ->get()->filter(function ($v) use ($hasher, $token) {
+                    return $hasher->check(substr($token, 32), $v->secret, ['salt' => $v->secret_salt]);
+                })->first();
+
+            if (empty($accessKey)) {
+                $this->error('The specified access key is invalid.');
+                return;
+            }
+
+            $accessKey->delete();
+
+            $this->info('Your access key is deleted: ' . $token);
+        } else {
+            echo $options->help();
+            exit;
+        }
+
+    }
+}
+
+$cli = new Console();
+$cli->run();
