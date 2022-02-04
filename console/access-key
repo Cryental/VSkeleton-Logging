@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+const LOGGING_START = true;
+
 require __DIR__ . '/../init.php';
 
 use Illuminate\Support\Str;

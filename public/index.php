@@ -1,4 +1,5 @@
 <?php
+const LOGGING_START = true;
 
 require __DIR__ . '/../init.php';
 

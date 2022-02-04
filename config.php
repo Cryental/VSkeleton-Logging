@@ -1,4 +1,7 @@
 <?php
+if (!defined("LOGGING_START")) {
+    return;
+}
 
 $config = [
     'database' => [
