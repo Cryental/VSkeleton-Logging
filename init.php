@@ -6,6 +6,8 @@ if (!defined("LOGGING_START")) {
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/config.php';
 
+date_default_timezone_set($config['timezone'] ?? 'UTC');
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 $capsule = new Capsule();

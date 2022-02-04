@@ -4,6 +4,7 @@ if (!defined("LOGGING_START")) {
 }
 
 $config = [
+    'timezone' => 'UTC',
     'database' => [
         'driver' => 'mysql',
         'host' => '127.0.0.1',
