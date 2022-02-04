@@ -14,13 +14,13 @@ class Console extends CLI
     {
         $options->setHelp('VSkeleton Logging Framework');
 
-        $options->registerOption('create', 'Create Access Key');
+        $options->registerOption('generate', 'Generate Access Key');
         $options->registerOption('delete', 'Delete Access Key', null, 'key');
     }
 
     protected function main(Options $options)
     {
-        if ($options->getOpt('create')) {
+        if ($options->getOpt('generate')) {
             $key = Str::random(64);
             $salt = Str::random(16);
 
