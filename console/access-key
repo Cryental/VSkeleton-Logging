@@ -12,7 +12,7 @@ class Console extends CLI
     {
         $options->setHelp('VSkeleton Logging Framework');
 
-        $options->registerOption('create', 'Create Access Key', null);
+        $options->registerOption('create', 'Create Access Key');
         $options->registerOption('delete', 'Delete Access Key', null, 'key');
     }
 
