@@ -18,9 +18,9 @@ composer install
 
 Generate an admin access key using this command:
 ```
-php ./console/access-key access-key --generate
+php ./console/access-key --generate
 ```
 Also you can delete an access key with this command:
 ```
-php ./console/access-key access-key --delete <key>
+php ./console/access-key --delete <key>
 ```
