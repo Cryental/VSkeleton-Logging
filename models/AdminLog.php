@@ -4,8 +4,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdminLog extends Model
 {
-    use UuidForKey;
-
     protected $table = 'admin_logs';
 
     const UPDATED_AT = null;
