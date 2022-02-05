@@ -9,6 +9,7 @@ class AccessToken extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'product_id',
         'key',
         'secret',
         'secret_salt',
