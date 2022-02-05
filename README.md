@@ -19,11 +19,15 @@ This app is an external log service app for Volistx Skeleton.
 composer install
 ```
 
-Generate an admin access key using this command:
+Generate a Product using this command:
 ```
-php ./console/access-key --generate
+php ./console/commands --product:generate product_name <product_name>
+```
+Generate an admin access key for specific product using this command:
+```
+php ./console/commands --key:generate product_id <product_id>
 ```
 Also you can delete an access key with this command:
 ```
-php ./console/access-key --delete <key>
+php ./console/access-key --delete key <key>
 ```
