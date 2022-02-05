@@ -1,0 +1,77 @@
+#!/usr/bin/env php
+<?php
+const LOGGING_START = true;
+
+require __DIR__ . '/../init.php';
+
+use Illuminate\Support\Str;
+use splitbrain\phpcli\CLI;
+use splitbrain\phpcli\Options;
+
+class Console extends CLI
+{
+    protected function Setup(Options $options)
+    {
+        $options->setHelp('VSkeleton Logging Framework');
+
+        $options->registerOption('product:generate', 'Generate Product', null, "product_name");
+        $options->registerOption('key:generate', 'Generate Access Key', null, 'product_id');
+        $options->registerOption('key:delete', 'Delete Access Key', null, 'key');
+    }
+
+    protected function main(Options $options)
+    {
+        if($options->getOpt('product:generate')){
+            $product = Product::query()->create([
+                    'name' => $options->getArgs()['0']
+            ]);
+            $this->success('Your Product is created, Id = ' . $product->id);
+        }
+        else if ($options->getOpt('key:generate')) {
+            $key = Str::random(64);
+            $salt = Str::random(16);
+
+            $repo = new AccessTokenRepository();
+            $repo->Create([
+                'key' => $key,
+                'salt' => $salt,
+                'permissions' => array('*'),
+                'whitelist_range' => array(),
+                'product_id' => $options->getArgs()['0']
+            ]);
+
+            $this->success('Your access key is created: ' . $key);
+        }
+        else if ($options->getOpt('key:delete'))
+        {
+            $repo = new AccessTokenRepository();
+            $key = $options->getArgs()['0'];
+
+            if (!$key) {
+                $this->error('Please specify your access key to delete.');
+                return;
+            }
+
+            $repo = new AccessTokenRepository();
+
+            $token = $repo->AuthAccessToken($key);
+
+            if (!$token) {
+                $this->error('Invalid Key.');
+                return;
+            }
+
+           $result = $repo->Delete($token->id);
+
+            $this->success('Access token got deleted successfully');
+        }
+        else {
+            echo $options->help();
+            exit;
+        }
+
+    }
+}
+
+$cli = new Console();
+$cli->run();
