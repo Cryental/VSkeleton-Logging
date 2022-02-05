@@ -10,6 +10,6 @@ $config = [
         'host' => '127.0.0.1',
         'database' => 'logging',
         'username' => 'root',
-        'password' => ''
+        'password' => '123'
     ]
 ];
