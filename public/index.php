@@ -9,11 +9,17 @@ Flight::map('notFound', function(){
 });
 
 Flight::route('POST /logs/admins', function () {
-    $repo = new AdminLogRepository();
-
     try {
+        $tokenRepo = new AccessTokenRepository();
+        //must get token
+        if (!$tokenRepo->AuthAccessToken(Flight::request()->data->access_token)){
+            http_response_code(401);
+            exit('');
+        }
+
+        $adminLogRepo = new AdminLogRepository();
         ray(Flight::request()->data);
-        $repo->Create([
+        $adminLogRepo->Create([
             'access_token_id' => Flight::request()->data->access_token_id,
             'url' => Flight::request()->data->url,
             'ip' => Flight::request()->data->ip,
@@ -31,10 +37,16 @@ Flight::route('POST /logs/admins', function () {
 });
 
 Flight::route('POST /logs/users', function () {
-    $repo = new UserLogRepository();
-
     try {
-        $repo->Create([
+        $tokenRepo = new AccessTokenRepository();
+        //must get token
+        if (!$tokenRepo->AuthAccessToken(Flight::request()->data->access_token)){
+            http_response_code(401);
+            exit('');
+        }
+
+        $userLogRepo = new UserLogRepository();
+        $userLogRepo->Create([
             'personal_token_id' => Flight::request()->data->personal_token_id,
             'url' => Flight::request()->data->url,
             'ip' => Flight::request()->data->ip,
