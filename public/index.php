@@ -1,3 +1,4 @@
+
 <?php
 const LOGGING_START = true;
 
@@ -11,8 +12,7 @@ Flight::map('notFound', function(){
 Flight::route('POST /logs/admins', function () {
     try {
         $tokenRepo = new AccessTokenRepository();
-        //must get token
-        if (!$tokenRepo->AuthAccessToken(Flight::request()->data->access_token)){
+        if (!$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken())){
             http_response_code(401);
             exit('');
         }
@@ -38,9 +38,10 @@ Flight::route('POST /logs/admins', function () {
 
 Flight::route('POST /logs/users', function () {
     try {
+        ray(AuthHelper::GetBearerToken());
         $tokenRepo = new AccessTokenRepository();
-        //must get token
-        if (!$tokenRepo->AuthAccessToken(Flight::request()->data->access_token)){
+
+        if (!$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken())){
             http_response_code(401);
             exit('');
         }
@@ -57,6 +58,7 @@ Flight::route('POST /logs/users', function () {
         exit('');
     }
     catch (Exception $ex){
+        ray($ex->getMessage());
         http_response_code(500);
         exit('');
     }
@@ -64,4 +66,4 @@ Flight::route('POST /logs/users', function () {
 
 });
 
-Flight::start();
+Flight::start();	
