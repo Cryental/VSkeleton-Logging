@@ -18,7 +18,6 @@ Flight::route('POST /logs/admins', function () {
         }
 
         $adminLogRepo = new AdminLogRepository();
-        ray(Flight::request()->data);
         $adminLogRepo->Create([
             'access_token_id' => Flight::request()->data->access_token_id,
             'url' => Flight::request()->data->url,
@@ -31,14 +30,12 @@ Flight::route('POST /logs/admins', function () {
     }
     catch (Exception $ex){
         http_response_code(500);
-        ray($ex->getMessage());
         exit('');
     }
 });
 
 Flight::route('POST /logs/users', function () {
     try {
-        ray(AuthHelper::GetBearerToken());
         $tokenRepo = new AccessTokenRepository();
 
         if (!$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken())){
@@ -58,12 +55,9 @@ Flight::route('POST /logs/users', function () {
         exit('');
     }
     catch (Exception $ex){
-        ray($ex->getMessage());
         http_response_code(500);
         exit('');
     }
-
-
 });
 
 Flight::start();	
