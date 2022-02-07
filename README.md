@@ -29,5 +29,5 @@ php ./console/commands --key:generate product_id <product_id>
 ```
 Also you can delete an access key with this command:
 ```
-php ./console/access-key --delete key <key>
+php ./console/access-key --key:delete key <key>
 ```

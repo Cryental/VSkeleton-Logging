@@ -44,7 +44,6 @@ class Console extends CLI
         }
         else if ($options->getOpt('key:delete'))
         {
-            $repo = new AccessTokenRepository();
             $key = $options->getArgs()['0'];
 
             if (!$key) {
