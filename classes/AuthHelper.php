@@ -32,4 +32,13 @@ class AuthHelper
         }
         return null;
     }
+
+    static function Auth(){
+        $tokenRepo = new AccessTokenRepository();
+
+        if (!$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken())){
+           return null;
+        }
+        return true;
+    }
 }
