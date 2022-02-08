@@ -3,7 +3,7 @@ CREATE TABLE `products` (
                             `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                             `created_at` datetime NOT NULL,
                             PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `access_tokens` (
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `access_tokens` (
                                  KEY `access_tokens_FK` (`product_id`),
                                  CONSTRAINT `access_tokens_FK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
                                  CONSTRAINT `permissions` CHECK (json_valid(`permissions`))
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE `admin_logs` (
@@ -39,12 +39,12 @@ CREATE TABLE `admin_logs` (
 
 CREATE TABLE `user_logs` (
                              `id` int(11) NOT NULL AUTO_INCREMENT,
-                             `personal_token_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+                             `subscription_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
                              `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                              `method` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                              `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
                              `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                              `created_at` datetime NOT NULL,
                              PRIMARY KEY (`id`),
-                             KEY `log_personal_token_id` (`personal_token_id`)
+                             KEY `subscription_id` (`subscription_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
