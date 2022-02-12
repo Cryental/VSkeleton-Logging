@@ -39,9 +39,7 @@ Flight::route('GET /logs/admins/', function (){
             exit('');
         }
 
-        $needle = Flight::request()->query['search']?? '';
-
-        // Find solution to pagination (doesnt work now)
+        $needle = Flight::request()->query['search']?? "";
         $page = Flight::request()->query['page']?? 1;
         $limit= Flight::request()->query['limit']?? 50;
 
@@ -53,7 +51,15 @@ Flight::route('GET /logs/admins/', function (){
         );
 
         http_response_code(200);
-        Flight::json($logs);
+
+        Flight::json([
+            'pagination' => [
+                'per_page' => $logs->perPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
+            ],
+            'items' => $logs->items()
+        ]);
         exit('');
     }
     catch (Exception $ex){
@@ -126,7 +132,14 @@ Flight::route('GET /logs/users/@subscription_id/', function ($subscription_id){
         );
 
         http_response_code(200);
-        Flight::json($logs);
+        Flight::json([
+            'pagination' => [
+                'per_page' => $logs->perPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
+            ],
+            'items' => $logs->items()
+        ]);
         exit('');
     }
     catch (Exception $ex){
@@ -142,8 +155,6 @@ Flight::route('GET /logs/users/', function (){
         }
 
         $needle = Flight::request()->query['search']?? '';
-
-        // Find solution to pagination (doesnt work now)
         $page = Flight::request()->query['page']?? 1;
         $limit= Flight::request()->query['limit']?? 50;
 
@@ -155,7 +166,15 @@ Flight::route('GET /logs/users/', function (){
         );
 
         http_response_code(200);
-        Flight::json($logs);
+
+        Flight::json([
+            'pagination' => [
+                'per_page' => $logs->perPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
+            ],
+            'items' => $logs->items()
+        ]);
         exit('');
     }
     catch (Exception $ex){
