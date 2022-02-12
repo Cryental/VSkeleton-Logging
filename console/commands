@@ -4,8 +4,7 @@ const LOGGING_START = true;
 
 require __DIR__ . '/../init.php';
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Str;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
@@ -65,9 +64,15 @@ class Console extends CLI
             $this->success('Access token got deleted successfully');
         } else if ($options->getOpt('db:wipe')) {
 
-            Product::query()->delete();
-            UserLog::query()->delete();
-            AdminLog::query()->delete();
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+            UserLog::query()->truncate();
+            AdminLog::query()->truncate();
+            Product::query()->truncate();
+            AccessToken::query()->truncate();
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
 
             $this->success('Database got wiped successfully');
         } else {
