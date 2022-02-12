@@ -8,6 +8,7 @@ CREATE TABLE `products` (
 
 CREATE TABLE IF NOT EXISTS `access_tokens` (
                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                 `product_id` int(11) NOT NULL,
                                  `key` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
                                  `secret` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
                                  `secret_salt` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -15,7 +16,6 @@ CREATE TABLE IF NOT EXISTS `access_tokens` (
                                  `permissions` longtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '[]',
                                  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
                                  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-                                 `product_id` int(11) NOT NULL,
                                  PRIMARY KEY (`id`),
                                  KEY `access_token_key` (`key`),
                                  KEY `access_tokens_FK` (`product_id`),

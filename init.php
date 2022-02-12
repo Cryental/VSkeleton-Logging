@@ -9,6 +9,7 @@ require __DIR__ . '/config.php';
 date_default_timezone_set($config['timezone'] ?? 'UTC');
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Pagination\Paginator;
 
 $capsule = new Capsule();
 
@@ -20,8 +21,9 @@ $capsule->addConnection([
     'password' => $config['database']['password'],
 ]);
 
-\Illuminate\Pagination\Paginator::currentPageResolver(function ($pageName = 'page') {
+Paginator::currentPageResolver(function ($pageName = 'page') {
     return (int) ($_GET[$pageName] ?? 1);
 });
+
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

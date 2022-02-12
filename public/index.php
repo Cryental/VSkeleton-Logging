@@ -1,5 +1,8 @@
 
 <?php
+
+use Carbon\Carbon;
+
 const LOGGING_START = true;
 
 require __DIR__ . '/../init.php';
@@ -102,7 +105,7 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
         }
 
         $userLogRepo = new UserLogRepository();
-        $count = $userLogRepo->FindLogsBySubscriptionCount($subscription_id,\Carbon\Carbon::now());
+        $count = $userLogRepo->FindLogsBySubscriptionCount($subscription_id, Carbon::now());
         http_response_code(200);
         Flight::json($count);
         exit('');
@@ -182,8 +185,5 @@ Flight::route('GET /logs/users/', function (){
         exit('');
     }
 });
-
-
-
 
 Flight::start();	
