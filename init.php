@@ -20,5 +20,8 @@ $capsule->addConnection([
     'password' => $config['database']['password'],
 ]);
 
+\Illuminate\Pagination\Paginator::currentPageResolver(function ($pageName = 'page') {
+    return (int) ($_GET[$pageName] ?? 1);
+});
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

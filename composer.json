@@ -7,7 +7,8 @@
         "ext-json": "*",
         "ramsey/uuid": "^4.2",
         "splitbrain/php-cli": "^1.1",
-        "spatie/ray": ">=1.33.2"
+        "spatie/ray": ">=1.33.2",
+        "illuminate/pagination": "*"
     },
     "autoload": {
         "classmap": [
