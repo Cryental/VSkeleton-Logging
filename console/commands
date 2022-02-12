@@ -4,6 +4,8 @@ const LOGGING_START = true;
 
 require __DIR__ . '/../init.php';
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
@@ -17,17 +19,17 @@ class Console extends CLI
         $options->registerOption('product:generate', 'Generate Product', null, "product_name");
         $options->registerOption('key:generate', 'Generate Access Key', null, 'product_id');
         $options->registerOption('key:delete', 'Delete Access Key', null, 'key');
+        $options->registerOption('db:wipe', 'Wipe DB for production');
     }
 
     protected function main(Options $options)
     {
-        if($options->getOpt('product:generate')){
+        if ($options->getOpt('product:generate')) {
             $product = Product::query()->create([
-                    'name' => $options->getArgs()['0']
+                'name' => $options->getArgs()['0']
             ]);
             $this->success('Your Product is created, Id = ' . $product->id);
-        }
-        else if ($options->getOpt('key:generate')) {
+        } else if ($options->getOpt('key:generate')) {
             $key = Str::random(64);
             $salt = Str::random(16);
 
@@ -41,9 +43,7 @@ class Console extends CLI
             ]);
 
             $this->success('Your access key is created: ' . $key);
-        }
-        else if ($options->getOpt('key:delete'))
-        {
+        } else if ($options->getOpt('key:delete')) {
             $key = $options->getArgs()['0'];
 
             if (!$key) {
@@ -60,11 +60,17 @@ class Console extends CLI
                 return;
             }
 
-           $result = $repo->Delete($token->id);
+            $result = $repo->Delete($token->id);
 
             $this->success('Access token got deleted successfully');
-        }
-        else {
+        } else if ($options->getOpt('db:wipe')) {
+
+            Product::query()->delete();
+            UserLog::query()->delete();
+            AdminLog::query()->delete();
+
+            $this->success('Database got wiped successfully');
+        } else {
             echo $options->help();
             exit;
         }
