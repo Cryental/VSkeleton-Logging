@@ -1,4 +1,3 @@
-
 <?php
 
 use Carbon\Carbon;
@@ -35,6 +34,7 @@ Flight::route('POST /logs/admins', function () {
         exit('');
     }
 });
+
 Flight::route('GET /logs/admins/', function (){
     try {
         if (!AuthHelper::Auth()){
@@ -72,7 +72,6 @@ Flight::route('GET /logs/admins/', function (){
     }
 });
 
-
 Flight::route('POST /logs/users', function () {
     try {
         if (!AuthHelper::Auth()){
@@ -97,6 +96,7 @@ Flight::route('POST /logs/users', function () {
         exit('');
     }
 });
+
 Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_id) {
     try {
         if (!AuthHelper::Auth()){
@@ -115,6 +115,7 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
         exit('');
     }
 });
+
 Flight::route('GET /logs/users/@subscription_id/', function ($subscription_id){
     try {
         if (!AuthHelper::Auth()){
@@ -150,6 +151,7 @@ Flight::route('GET /logs/users/@subscription_id/', function ($subscription_id){
         exit('');
     }
 });
+
 Flight::route('GET /logs/users/', function (){
     try {
         if (!AuthHelper::Auth()){
