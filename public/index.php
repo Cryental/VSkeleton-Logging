@@ -54,15 +54,7 @@ Flight::route('GET /logs/admins/', function (){
         );
 
         http_response_code(200);
-
-        Flight::json([
-            'pagination' => [
-                'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
-            ],
-            'items' => $logs->items()
-        ]);
+        Flight::json($logs);
         exit('');
     }
     catch (Exception $ex){
@@ -116,7 +108,7 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
     }
 });
 
-Flight::route('GET /logs/users/@subscription_id/', function ($subscription_id){
+Flight::route('GET /logs/users/@subscription_id', function ($subscription_id){
     try {
         if (!AuthHelper::Auth()){
             http_response_code(401);
@@ -124,7 +116,6 @@ Flight::route('GET /logs/users/@subscription_id/', function ($subscription_id){
         }
         $needle = Flight::request()->query['search']?? '';
 
-        // Find solution to pagination (doesnt work now)
         $page = Flight::request()->query['page']?? 1;
         $limit= Flight::request()->query['limit']?? 50;
 
@@ -136,14 +127,7 @@ Flight::route('GET /logs/users/@subscription_id/', function ($subscription_id){
         );
 
         http_response_code(200);
-        Flight::json([
-            'pagination' => [
-                'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
-            ],
-            'items' => $logs->items()
-        ]);
+        Flight::json($logs);
         exit('');
     }
     catch (Exception $ex){
@@ -172,14 +156,7 @@ Flight::route('GET /logs/users/', function (){
 
         http_response_code(200);
 
-        Flight::json([
-            'pagination' => [
-                'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
-            ],
-            'items' => $logs->items()
-        ]);
+        Flight::json($logs);
         exit('');
     }
     catch (Exception $ex){
