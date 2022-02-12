@@ -88,8 +88,10 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
             exit('');
         }
 
+        $date = Flight::request()->query['date'] ??  Carbon::now();
+
         $userLogRepo = new UserLogRepository();
-        $count = $userLogRepo->FindLogsBySubscriptionCount($subscription_id, Carbon::now());
+        $count = $userLogRepo->FindLogsBySubscriptionCount($subscription_id, $date);
         http_response_code(200);
         Flight::json($count);
         exit('');
