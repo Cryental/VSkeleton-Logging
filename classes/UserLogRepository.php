@@ -33,9 +33,10 @@ class UserLogRepository
         $query = UserLog::query();
 
         foreach ($columns as $column) {
-            $query->orWhere("user_logs.$column", 'LIKE', "%$needle%");
+            $query->orWhere("$column", 'LIKE', "%$needle%");
         }
-        return $query->orderBy('user_logs.created_at', 'DESC')->get();
+        return $query->orderBy('created_at', 'DESC')
+            ->paginate($limit,['*'],'page',$page);
     }
 
 
@@ -50,7 +51,7 @@ class UserLogRepository
                 ->orWhere('user_agent', 'LIKE', "%$needle%")
                 ->orWhere('created_at', 'LIKE', "%$needle%");
         })->orderBy('user_logs.created_at', 'DESC')
-            ->get();
+            ->paginate($limit,['*'],'page',$page);
     }
 
 

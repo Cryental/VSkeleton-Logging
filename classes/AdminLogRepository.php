@@ -36,6 +36,6 @@ class AdminLogRepository
             $query->orWhere("$column", 'LIKE', "%$needle%");
         }
         return $query->orderBy('created_at', 'DESC')
-            ->get();
+            ->paginate($limit,['*'],'page',$page);
     }
 }
