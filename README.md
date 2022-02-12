@@ -27,7 +27,11 @@ Generate an admin access key for specific product using this command:
 ```
 php ./console/commands --key:generate product_id <product_id>
 ```
-Also you can delete an access key with this command:
+Delete an access key with this command:
 ```
-php ./console/access-key --key:delete key <key>
+php ./console/commands --key:delete key <key>
+```
+Also you can wipe the DB for production wih this command:
+```
+php ./console/commands --db:wipe
 ```
