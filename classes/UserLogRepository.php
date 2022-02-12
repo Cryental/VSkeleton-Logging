@@ -4,7 +4,7 @@ class UserLogRepository
 {
     public function Create(array $inputs)
     {
-        UserLog::query()->create([
+        return UserLog::query()->create([
             'subscription_id' => $inputs['subscription_id'],
             'url' => $inputs['url'],
             'ip' => $inputs['ip'],
