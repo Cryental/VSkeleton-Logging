@@ -35,14 +35,23 @@ class UserLogRepository
         foreach ($columns as $column) {
             $query->orWhere("$column", 'LIKE', "%$needle%");
         }
-        return $query->orderBy('created_at', 'DESC')
+        $logs = $query->orderBy('created_at', 'DESC')
             ->paginate($limit,['*'],'page',$page);
+
+        return [
+            'pagination' => [
+                'per_page' => $logs->perPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
+            ],
+            'items' => $logs->items()
+        ];
     }
 
 
     public function FindLogsBySubscription($subscription_id, $needle, $page, $limit)
     {
-        return UserLog::where('subscription_id', $subscription_id)->where(function($q) use($needle){
+        $logs = UserLog::where('subscription_id', $subscription_id)->where(function($q) use($needle){
             $q->where('id', 'LIKE', "%$needle%")
                 ->orWhere('subscription_id', 'LIKE', "%$needle%")
                 ->orWhere('url', 'LIKE', "%$needle%")
@@ -52,6 +61,15 @@ class UserLogRepository
                 ->orWhere('created_at', 'LIKE', "%$needle%");
         })->orderBy('user_logs.created_at', 'DESC')
             ->paginate($limit,['*'],'page',$page);
+
+        return [
+            'pagination' => [
+                'per_page' => $logs->perPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
+            ],
+            'items' => $logs->items()
+        ];
     }
 
 
