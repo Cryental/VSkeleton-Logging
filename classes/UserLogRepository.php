@@ -6,10 +6,10 @@ class UserLogRepository
     {
         return UserLog::query()->create([
             'subscription_id' => $inputs['subscription_id'],
-            'url' => $inputs['url'],
-            'ip' => $inputs['ip'],
-            'method' => $inputs['method'],
-            'user_agent' => $inputs['user_agent'],
+            'url'             => $inputs['url'],
+            'ip'              => $inputs['ip'],
+            'method'          => $inputs['method'],
+            'user_agent'      => $inputs['user_agent'],
         ]);
     }
 
@@ -27,7 +27,7 @@ class UserLogRepository
             'method',
             'ip',
             'user_agent',
-            'created_at'
+            'created_at',
         ];
 
         $query = UserLog::query();
@@ -36,22 +36,21 @@ class UserLogRepository
             $query->orWhere("$column", 'LIKE', "%$needle%");
         }
         $logs = $query->orderBy('created_at', 'DESC')
-            ->paginate($limit,['*'],'page',$page);
+            ->paginate($limit, ['*'], 'page', $page);
 
         return [
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->lastPage(),
             ],
-            'items' => $logs->items()
+            'items' => $logs->items(),
         ];
     }
 
-
     public function FindLogsBySubscription($subscription_id, $needle, $page, $limit)
     {
-        $logs = UserLog::where('subscription_id', $subscription_id)->where(function($q) use($needle){
+        $logs = UserLog::where('subscription_id', $subscription_id)->where(function ($q) use ($needle) {
             $q->where('id', 'LIKE', "%$needle%")
                 ->orWhere('subscription_id', 'LIKE', "%$needle%")
                 ->orWhere('url', 'LIKE', "%$needle%")
@@ -60,18 +59,17 @@ class UserLogRepository
                 ->orWhere('user_agent', 'LIKE', "%$needle%")
                 ->orWhere('created_at', 'LIKE', "%$needle%");
         })->orderBy('user_logs.created_at', 'DESC')
-            ->paginate($limit,['*'],'page',$page);
+            ->paginate($limit, ['*'], 'page', $page);
 
         return [
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->lastPage(),
             ],
-            'items' => $logs->items()
+            'items' => $logs->items(),
         ];
     }
-
 
     public function FindLogsBySubscriptionCount($subscription_id, $date): int
     {

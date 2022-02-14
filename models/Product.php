@@ -11,7 +11,7 @@ class Product extends Model
     const UPDATED_AT = null;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     protected $casts = [
