@@ -4,7 +4,7 @@ use Carbon\Carbon;
 
 const LOGGING_START = true;
 
-require __DIR__ . '/../init.php';
+require __DIR__.'/../init.php';
 
 Flight::map('notFound', function () {
     http_response_code(404);
@@ -21,10 +21,10 @@ Flight::route('POST /logs/admins', function () {
         $adminLogRepo = new AdminLogRepository();
         $log = $adminLogRepo->Create([
             'access_token_id' => Flight::request()->data->access_token_id,
-            'url' => Flight::request()->data->url,
-            'ip' => Flight::request()->data->ip,
-            'method' => Flight::request()->data->method,
-            'user_agent' => Flight::request()->data->user_agent,
+            'url'             => Flight::request()->data->url,
+            'ip'              => Flight::request()->data->ip,
+            'method'          => Flight::request()->data->method,
+            'user_agent'      => Flight::request()->data->user_agent,
         ]);
 
         Flight::json($log, 201);
@@ -41,7 +41,7 @@ Flight::route('GET /logs/admins/', function () {
             exit('');
         }
 
-        $needle = Flight::request()->query['search'] ?? "";
+        $needle = Flight::request()->query['search'] ?? '';
         $page = Flight::request()->query['page'] ?? 1;
         $limit = Flight::request()->query['limit'] ?? 50;
 
@@ -68,10 +68,10 @@ Flight::route('POST /logs/users', function () {
         $userLogRepo = new UserLogRepository();
         $log = $userLogRepo->Create([
             'subscription_id' => Flight::request()->data->subscription_id,
-            'url' => Flight::request()->data->url,
-            'ip' => Flight::request()->data->ip,
-            'method' => Flight::request()->data->method,
-            'user_agent' => Flight::request()->data->user_agent,
+            'url'             => Flight::request()->data->url,
+            'ip'              => Flight::request()->data->ip,
+            'method'          => Flight::request()->data->method,
+            'user_agent'      => Flight::request()->data->user_agent,
         ]);
 
         Flight::json($log);
@@ -88,7 +88,7 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
             exit('');
         }
 
-        $date = Flight::request()->query['date'] ??  Carbon::now();
+        $date = Flight::request()->query['date'] ?? Carbon::now();
 
         $userLogRepo = new UserLogRepository();
         $count = $userLogRepo->FindLogsBySubscriptionCount($subscription_id, $date);
@@ -113,7 +113,8 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
         $limit = Flight::request()->query['limit'] ?? 50;
 
         $userLogRepo = new UserLogRepository();
-        $logs = $userLogRepo->FindLogsBySubscription($subscription_id,
+        $logs = $userLogRepo->FindLogsBySubscription(
+            $subscription_id,
             $needle,
             $page,
             $limit
@@ -151,4 +152,4 @@ Flight::route('GET /logs/users/', function () {
     }
 });
 
-Flight::start();	
+Flight::start();

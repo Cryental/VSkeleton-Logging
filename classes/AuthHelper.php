@@ -2,13 +2,13 @@
 
 class AuthHelper
 {
-    static function GetAuthHeaders()
+    public static function GetAuthHeaders()
     {
         $headers = null;
         if (isset($_SERVER['Authorization'])) {
-            $headers = trim($_SERVER["Authorization"]);
-        } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
-            $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+            $headers = trim($_SERVER['Authorization']);
+        } elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
+            $headers = trim($_SERVER['HTTP_AUTHORIZATION']);
         } elseif (function_exists('apache_request_headers')) {
             $requestHeaders = apache_request_headers();
             // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
@@ -18,10 +18,11 @@ class AuthHelper
                 $headers = trim($requestHeaders['Authorization']);
             }
         }
+
         return $headers;
     }
 
-    static function GetBearerToken()
+    public static function GetBearerToken()
     {
         $headers = self::GetAuthHeaders();
         // HEADER: Get the access token from the header
@@ -30,15 +31,18 @@ class AuthHelper
                 return $matches[1];
             }
         }
+
         return null;
     }
 
-    static function Auth(){
+    public static function Auth()
+    {
         $tokenRepo = new AccessTokenRepository();
 
-        if (!$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken())){
-           return null;
+        if (!$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken())) {
+            return null;
         }
+
         return true;
     }
 }

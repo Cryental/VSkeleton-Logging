@@ -7,12 +7,12 @@ class AccessTokenRepository
         $hasher = new SHA256Hasher();
 
         return AccessToken::query()->create([
-            'key' => substr($inputs['key'], 0, 32),
-            'secret' => $hasher->make(substr($inputs['key'], 32), ['salt' => $inputs['salt']]),
-            'secret_salt' => $inputs['salt'],
-            'permissions' => $inputs['permissions'],
+            'key'             => substr($inputs['key'], 0, 32),
+            'secret'          => $hasher->make(substr($inputs['key'], 32), ['salt' => $inputs['salt']]),
+            'secret_salt'     => $inputs['salt'],
+            'permissions'     => $inputs['permissions'],
             'whitelist_range' => $inputs['whitelist_range'],
-            'product_id' =>$inputs['product_id']
+            'product_id'      => $inputs['product_id'],
         ]);
     }
 
@@ -32,10 +32,9 @@ class AccessTokenRepository
         $toBeDeletedToken->delete();
 
         return [
-            'result' => 'true'
+            'result' => 'true',
         ];
     }
-
 
     public function AuthAccessToken($token)
     {
