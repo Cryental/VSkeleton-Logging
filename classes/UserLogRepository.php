@@ -8,11 +8,11 @@ class UserLogRepository
     {
         return UserLog::query()->create([
             'logging_access_token_id' => $inputs['logging_access_token_id'],
-            'subscription_id' => $inputs['subscription_id'],
-            'url' => $inputs['url'],
-            'ip' => $inputs['ip'],
-            'method' => $inputs['method'],
-            'user_agent' => $inputs['user_agent'],
+            'subscription_id'         => $inputs['subscription_id'],
+            'url'                     => $inputs['url'],
+            'ip'                      => $inputs['ip'],
+            'method'                  => $inputs['method'],
+            'user_agent'              => $inputs['user_agent'],
         ]);
     }
 
@@ -42,8 +42,8 @@ class UserLogRepository
         return [
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->lastPage(),
             ],
             'items' => $logs->items(),
         ];
@@ -70,8 +70,8 @@ class UserLogRepository
         return [
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->lastPage(),
             ],
             'items' => $logs->items(),
         ];
