@@ -1,15 +1,18 @@
 <?php
 
+use Carbon\Carbon;
+
 class UserLogRepository
 {
     public function Create(array $inputs)
     {
         return UserLog::query()->create([
+            'logging_access_token_id' => $inputs['logging_access_token_id'],
             'subscription_id' => $inputs['subscription_id'],
-            'url'             => $inputs['url'],
-            'ip'              => $inputs['ip'],
-            'method'          => $inputs['method'],
-            'user_agent'      => $inputs['user_agent'],
+            'url' => $inputs['url'],
+            'ip' => $inputs['ip'],
+            'method' => $inputs['method'],
+            'user_agent' => $inputs['user_agent'],
         ]);
     }
 
@@ -21,15 +24,13 @@ class UserLogRepository
     public function FindAll($needle, $page, $limit)
     {
         $columns = [
-            'id',
+            'logging_access_token_id',
             'subscription_id',
             'url',
-            'method',
             'ip',
+            'method',
             'user_agent',
-            'created_at',
         ];
-
         $query = UserLog::query();
 
         foreach ($columns as $column) {
@@ -41,41 +42,59 @@ class UserLogRepository
         return [
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current'  => $logs->currentPage(),
-                'total'    => $logs->lastPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
             ],
             'items' => $logs->items(),
         ];
     }
 
-    public function FindLogsBySubscription($subscription_id, $needle, $page, $limit)
+    public function FindSubscriptionLogs($subscription_id, $needle, $page, $limit)
     {
-        $logs = UserLog::where('subscription_id', $subscription_id)->where(function ($q) use ($needle) {
-            $q->where('id', 'LIKE', "%$needle%")
-                ->orWhere('subscription_id', 'LIKE', "%$needle%")
-                ->orWhere('url', 'LIKE', "%$needle%")
-                ->orWhere('method', 'LIKE', "%$needle%")
-                ->orWhere('ip', 'LIKE', "%$needle%")
-                ->orWhere('user_agent', 'LIKE', "%$needle%")
-                ->orWhere('created_at', 'LIKE', "%$needle%");
+        $columns = [
+            'logging_access_token_id',
+            'subscription_id',
+            'url',
+            'ip',
+            'method',
+            'user_agent',
+        ];
+
+        $logs = UserLog::where('subscription_id', $subscription_id)->where(function ($query) use ($columns, $needle) {
+            foreach ($columns as $column) {
+                $query->orWhere("$column", 'LIKE', "%$needle%");
+            }
         })->orderBy('user_logs.created_at', 'DESC')
             ->paginate($limit, ['*'], 'page', $page);
 
         return [
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current'  => $logs->currentPage(),
-                'total'    => $logs->lastPage(),
+                'current' => $logs->currentPage(),
+                'total' => $logs->lastPage(),
             ],
             'items' => $logs->items(),
         ];
     }
 
-    public function FindLogsBySubscriptionCount($subscription_id, $date): int
+    public function FindSubscriptionLogsCount($subscription_id, $date): int
     {
         return UserLog::where('subscription_id', $subscription_id)
             ->whereMonth('user_logs.created_at', $date->format('m'))
             ->whereYear('user_logs.created_at', $date->format('Y'))
             ->count();
+    }
+
+    public function FindSubscriptionLogsInMonth($subscription_id, $date)
+    {
+        $specifiedDate = Carbon::parse($date);
+
+        return UserLog::where('subscription_id', $subscription_id)
+            ->whereYear('created_at', $specifiedDate->format('Y'))
+            ->whereMonth('created_at', $specifiedDate->format('m'))
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->created_at)->format('j'); // grouping by days
+            })->toArray();
     }
 }

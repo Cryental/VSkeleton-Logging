@@ -5,6 +5,7 @@ class AdminLogRepository
     public function Create(array $inputs)
     {
         return  AdminLog::query()->create([
+            'logging_access_token_id' => $inputs['logging_access_token_id'],
             'access_token_id' => $inputs['access_token_id'],
             'url'             => $inputs['url'],
             'ip'              => $inputs['ip'],
@@ -21,13 +22,12 @@ class AdminLogRepository
     public function FindAll($needle, $page, $limit)
     {
         $columns = [
-            'id',
+            'logging_access_token_id',
             'access_token_id',
             'url',
-            'method',
             'ip',
+            'method',
             'user_agent',
-            'created_at',
         ];
 
         $query = AdminLog::query();

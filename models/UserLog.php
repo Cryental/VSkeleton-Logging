@@ -11,6 +11,7 @@ class UserLog extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'logging_access_token_id',
         'subscription_id',
         'url',
         'method',

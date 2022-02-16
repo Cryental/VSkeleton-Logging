@@ -11,6 +11,7 @@ class AdminLog extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'logging_access_token_id',
         'access_token_id',
         'url',
         'method',

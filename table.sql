@@ -5,8 +5,7 @@ CREATE TABLE `products` (
                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-CREATE TABLE IF NOT EXISTS `access_tokens` (
+CREATE TABLE `access_tokens` (
                                  `id` int(11) NOT NULL AUTO_INCREMENT,
                                  `product_id` int(11) NOT NULL,
                                  `key` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -23,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `access_tokens` (
                                  CONSTRAINT `permissions` CHECK (json_valid(`permissions`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
 CREATE TABLE `admin_logs` (
                               `id` int(11) NOT NULL AUTO_INCREMENT,
                               `access_token_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -32,10 +30,12 @@ CREATE TABLE `admin_logs` (
                               `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
                               `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                               `created_at` datetime NOT NULL,
+                              `logging_access_token_id` int(11) NOT NULL,
                               PRIMARY KEY (`id`),
-                              KEY `log_access_token_id` (`access_token_id`)
+                              KEY `log_access_token_id` (`access_token_id`),
+                              KEY `admin_logs_FK` (`logging_access_token_id`),
+                              CONSTRAINT `admin_logs_FK` FOREIGN KEY (`logging_access_token_id`) REFERENCES `access_tokens` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 CREATE TABLE `user_logs` (
                              `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -45,6 +45,9 @@ CREATE TABLE `user_logs` (
                              `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
                              `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                              `created_at` datetime NOT NULL,
+                             `logging_access_token_id` int(11) NOT NULL,
                              PRIMARY KEY (`id`),
-                             KEY `subscription_id` (`subscription_id`)
+                             KEY `subscription_id` (`subscription_id`),
+                             KEY `user_logs_FK` (`logging_access_token_id`),
+                             CONSTRAINT `user_logs_FK` FOREIGN KEY (`logging_access_token_id`) REFERENCES `access_tokens` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -13,13 +13,16 @@ Flight::map('notFound', function () {
 
 Flight::route('POST /logs/admins', function () {
     try {
-        if (!AuthHelper::Auth()) {
+        $token = AuthHelper::Auth();
+
+        if (!$token) {
             http_response_code(401);
             exit('');
         }
 
         $adminLogRepo = new AdminLogRepository();
         $log = $adminLogRepo->Create([
+            'logging_access_token_id' => $token->id,
             'access_token_id' => Flight::request()->data->access_token_id,
             'url'             => Flight::request()->data->url,
             'ip'              => Flight::request()->data->ip,
@@ -60,13 +63,16 @@ Flight::route('GET /logs/admins/', function () {
 
 Flight::route('POST /logs/users', function () {
     try {
-        if (!AuthHelper::Auth()) {
+        $token = AuthHelper::Auth();
+
+        if (!$token) {
             http_response_code(401);
             exit('');
         }
 
         $userLogRepo = new UserLogRepository();
         $log = $userLogRepo->Create([
+            'logging_access_token_id' => $token->id,
             'subscription_id' => Flight::request()->data->subscription_id,
             'url'             => Flight::request()->data->url,
             'ip'              => Flight::request()->data->ip,
@@ -91,7 +97,7 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
         $date = Flight::request()->query['date'] ?? Carbon::now();
 
         $userLogRepo = new UserLogRepository();
-        $count = $userLogRepo->FindLogsBySubscriptionCount($subscription_id, $date);
+        $count = $userLogRepo->FindSubscriptionLogsCount($subscription_id, $date);
         http_response_code(200);
         Flight::json($count);
         exit('');
@@ -113,7 +119,7 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
         $limit = Flight::request()->query['limit'] ?? 50;
 
         $userLogRepo = new UserLogRepository();
-        $logs = $userLogRepo->FindLogsBySubscription(
+        $logs = $userLogRepo->FindSubscriptionLogs(
             $subscription_id,
             $needle,
             $page,
@@ -146,6 +152,26 @@ Flight::route('GET /logs/users/', function () {
         );
 
         Flight::json($logs);
+    } catch (Exception $ex) {
+        http_response_code(500);
+        exit('');
+    }
+});
+
+Flight::route('GET /logs/users/@subscription_id/month', function ($subscription_id) {
+    try {
+        if (!AuthHelper::Auth()) {
+            http_response_code(401);
+            exit('');
+        }
+
+        $date = Flight::request()->query['date'] ?? Carbon::now();
+
+        $userLogRepo = new UserLogRepository();
+        $logs = $userLogRepo->FindSubscriptionLogsInMonth($subscription_id, $date);
+        http_response_code(200);
+        Flight::json($logs);
+        exit('');
     } catch (Exception $ex) {
         http_response_code(500);
         exit('');
