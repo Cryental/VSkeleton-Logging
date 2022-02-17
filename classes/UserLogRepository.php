@@ -36,17 +36,8 @@ class UserLogRepository
         foreach ($columns as $column) {
             $query->orWhere("$column", 'LIKE', "%$needle%");
         }
-        $logs = $query->orderBy('created_at', 'DESC')
-            ->paginate($limit, ['*'], 'page', $page);
-
-        return [
-            'pagination' => [
-                'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
-            ],
-            'items' => $logs->items(),
-        ];
+        return $query->orderBy('created_at', 'DESC')
+            ->paginate($limit, ['*'], 'page', $page)->toArray();
     }
 
     public function FindSubscriptionLogs($subscription_id, $needle, $page, $limit)
@@ -60,21 +51,12 @@ class UserLogRepository
             'user_agent',
         ];
 
-        $logs = UserLog::where('subscription_id', $subscription_id)->where(function ($query) use ($columns, $needle) {
+        return UserLog::where('subscription_id', $subscription_id)->where(function ($query) use ($columns, $needle) {
             foreach ($columns as $column) {
                 $query->orWhere("$column", 'LIKE', "%$needle%");
             }
         })->orderBy('user_logs.created_at', 'DESC')
-            ->paginate($limit, ['*'], 'page', $page);
-
-        return [
-            'pagination' => [
-                'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
-            ],
-            'items' => $logs->items(),
-        ];
+            ->paginate($limit, ['*'], 'page', $page)->toArray();
     }
 
     public function FindSubscriptionLogsCount($subscription_id, $date): int
@@ -85,7 +67,7 @@ class UserLogRepository
             ->count();
     }
 
-    public function FindSubscriptionLogsInMonth($subscription_id, $date)
+    public function FindSubscriptionUsages($subscription_id, $date)
     {
         $specifiedDate = Carbon::parse($date);
 
