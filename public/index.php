@@ -158,7 +158,7 @@ Flight::route('GET /logs/users/', function () {
     }
 });
 
-Flight::route('GET /logs/users/@subscription_id/month', function ($subscription_id) {
+Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription_id) {
     try {
         if (!AuthHelper::Auth()) {
             http_response_code(401);
@@ -168,7 +168,7 @@ Flight::route('GET /logs/users/@subscription_id/month', function ($subscription_
         $date = Flight::request()->query['date'] ?? Carbon::now();
 
         $userLogRepo = new UserLogRepository();
-        $logs = $userLogRepo->FindSubscriptionLogsInMonth($subscription_id, $date);
+        $logs = $userLogRepo->FindSubscriptionUsages($subscription_id, $date);
         http_response_code(200);
         Flight::json($logs);
         exit('');
