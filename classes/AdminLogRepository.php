@@ -35,6 +35,7 @@ class AdminLogRepository
         foreach ($columns as $column) {
             $query->orWhere("$column", 'LIKE', "%$needle%");
         }
+
         return $query->orderBy('created_at', 'DESC')
             ->paginate($limit, ['*'], 'page', $page)->toArray();
     }

@@ -8,11 +8,11 @@ class UserLogRepository
     {
         return UserLog::query()->create([
             'logging_access_token_id' => $inputs['logging_access_token_id'],
-            'subscription_id' => $inputs['subscription_id'],
-            'url' => $inputs['url'],
-            'ip' => $inputs['ip'],
-            'method' => $inputs['method'],
-            'user_agent' => $inputs['user_agent'],
+            'subscription_id'         => $inputs['subscription_id'],
+            'url'                     => $inputs['url'],
+            'ip'                      => $inputs['ip'],
+            'method'                  => $inputs['method'],
+            'user_agent'              => $inputs['user_agent'],
         ]);
     }
 
@@ -36,6 +36,7 @@ class UserLogRepository
         foreach ($columns as $column) {
             $query->orWhere("$column", 'LIKE', "%$needle%");
         }
+
         return $query->orderBy('created_at', 'DESC')
             ->paginate($limit, ['*'], 'page', $page)->toArray();
     }
