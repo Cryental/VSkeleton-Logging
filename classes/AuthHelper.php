@@ -39,7 +39,7 @@ class AuthHelper
     {
         $tokenRepo = new AccessTokenRepository();
 
-        $token =$tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken());
+        $token = $tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken());
         if (!$token) {
             return null;
         }

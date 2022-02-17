@@ -23,11 +23,11 @@ Flight::route('POST /logs/admins', function () {
         $adminLogRepo = new AdminLogRepository();
         $log = $adminLogRepo->Create([
             'logging_access_token_id' => $token->id,
-            'access_token_id' => Flight::request()->data->access_token_id,
-            'url'             => Flight::request()->data->url,
-            'ip'              => Flight::request()->data->ip,
-            'method'          => Flight::request()->data->method,
-            'user_agent'      => Flight::request()->data->user_agent,
+            'access_token_id'         => Flight::request()->data->access_token_id,
+            'url'                     => Flight::request()->data->url,
+            'ip'                      => Flight::request()->data->ip,
+            'method'                  => Flight::request()->data->method,
+            'user_agent'              => Flight::request()->data->user_agent,
         ]);
 
         Flight::json($log, 201);
@@ -73,11 +73,11 @@ Flight::route('POST /logs/users', function () {
         $userLogRepo = new UserLogRepository();
         $log = $userLogRepo->Create([
             'logging_access_token_id' => $token->id,
-            'subscription_id' => Flight::request()->data->subscription_id,
-            'url'             => Flight::request()->data->url,
-            'ip'              => Flight::request()->data->ip,
-            'method'          => Flight::request()->data->method,
-            'user_agent'      => Flight::request()->data->user_agent,
+            'subscription_id'         => Flight::request()->data->subscription_id,
+            'url'                     => Flight::request()->data->url,
+            'ip'                      => Flight::request()->data->ip,
+            'method'                  => Flight::request()->data->method,
+            'user_agent'              => Flight::request()->data->user_agent,
         ]);
 
         Flight::json($log);
