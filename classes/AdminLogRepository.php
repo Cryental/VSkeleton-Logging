@@ -4,7 +4,7 @@ class AdminLogRepository
 {
     public function Create(array $inputs)
     {
-        return  AdminLog::query()->create([
+        return AdminLog::query()->create([
             'logging_access_token_id' => $inputs['logging_access_token_id'],
             'access_token_id'         => $inputs['access_token_id'],
             'url'                     => $inputs['url'],
