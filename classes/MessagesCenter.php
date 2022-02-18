@@ -1,13 +1,12 @@
 <?php
 
-
 class MessagesCenter
 {
     public static function E400($error = 'One or more invalid fields were specified using the fields parameters.'): array
     {
         return self::Error('xInvalidParameters', $error);
     }
-    
+
     public static function Error(string $type, $info): array
     {
         return [

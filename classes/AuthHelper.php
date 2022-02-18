@@ -46,13 +46,13 @@ class AuthHelper
             return null;
         }
 
-        if($token->active == false){
+        if ($token->active == false) {
             return false;
         }
 
         $ipSet = new IPSet($token->whitelist_range);
         if (!empty($token->whitelist_range) && !$ipSet->match(Flight::request()->ip)) {
-           return false;
+            return false;
         }
 
         return $token;

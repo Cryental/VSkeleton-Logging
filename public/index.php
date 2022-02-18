@@ -7,7 +7,7 @@ const LOGGING_START = true;
 require __DIR__.'/../init.php';
 
 Flight::map('notFound', function () {
-    Flight::json(MessagesCenter::E404("No Route Found"), 404);
+    Flight::json(MessagesCenter::E404('No Route Found'), 404);
 });
 
 Flight::route('POST /logs/admins', function () {
@@ -16,14 +16,15 @@ Flight::route('POST /logs/admins', function () {
 
         if (!$token) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
-        if(!RequestValidator::ValidateAdminLogRequest()) {
+        if (!RequestValidator::ValidateAdminLogRequest()) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
-
 
         $adminLogRepo = new AdminLogRepository();
         $log = $adminLogRepo->Create([
@@ -45,6 +46,7 @@ Flight::route('GET /logs/admins/', function () {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
@@ -70,10 +72,12 @@ Flight::route('POST /logs/users', function () {
 
         if (!$token) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
-        if(!RequestValidator::ValidateUserLogRequest()) {
+        if (!RequestValidator::ValidateUserLogRequest()) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
 
@@ -97,6 +101,7 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
@@ -115,6 +120,7 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
         $needle = Flight::request()->query['search'] ?? '';
@@ -138,6 +144,7 @@ Flight::route('GET /logs/users/', function () {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
@@ -162,6 +169,7 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 

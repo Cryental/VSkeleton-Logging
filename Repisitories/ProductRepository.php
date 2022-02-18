@@ -5,7 +5,7 @@ class ProductRepository
     public function Create(array $inputs)
     {
         return Product::query()->create([
-            'name' => $inputs['name']
+            'name' => $inputs['name'],
         ]);
     }
 

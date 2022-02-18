@@ -14,11 +14,11 @@ class AccessToken extends Model
         'secret',
         'secret_salt',
         'whitelist_range',
-        'active'
+        'active',
     ];
 
     protected $casts = [
         'whitelist_range' => 'array',
-        'active' => 'boolean'
+        'active'          => 'boolean',
     ];
 }

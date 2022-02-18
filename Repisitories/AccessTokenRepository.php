@@ -1,6 +1,5 @@
 <?php
 
-
 class AccessTokenRepository
 {
     public function Create(array $inputs)
@@ -13,7 +12,7 @@ class AccessTokenRepository
             'secret_salt'     => $inputs['salt'],
             'whitelist_range' => $inputs['whitelist_range'],
             'product_id'      => $inputs['product_id'],
-            'active'          => true
+            'active'          => true,
         ]);
     }
 
