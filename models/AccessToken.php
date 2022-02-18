@@ -13,12 +13,12 @@ class AccessToken extends Model
         'key',
         'secret',
         'secret_salt',
-        'permissions',
         'whitelist_range',
+        'active'
     ];
 
     protected $casts = [
-        'permissions'     => 'array',
         'whitelist_range' => 'array',
+        'active' => 'boolean'
     ];
 }
