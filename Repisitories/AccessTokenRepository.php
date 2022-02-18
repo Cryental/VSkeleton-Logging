@@ -1,5 +1,6 @@
 <?php
 
+
 class AccessTokenRepository
 {
     public function Create(array $inputs)
@@ -10,9 +11,9 @@ class AccessTokenRepository
             'key'             => substr($inputs['key'], 0, 32),
             'secret'          => $hasher->make(substr($inputs['key'], 32), ['salt' => $inputs['salt']]),
             'secret_salt'     => $inputs['salt'],
-            'permissions'     => $inputs['permissions'],
             'whitelist_range' => $inputs['whitelist_range'],
             'product_id'      => $inputs['product_id'],
+            'active'          => true
         ]);
     }
 
@@ -29,14 +30,16 @@ class AccessTokenRepository
             return null;
         }
 
-        $toBeDeletedToken->delete();
+        $toBeDeletedToken->active = false;
+
+        $toBeDeletedToken->save();
 
         return [
             'result' => 'true',
         ];
     }
 
-    public function AuthAccessToken($token)
+    public function GetAccessToken($token)
     {
         $hasher = new SHA256Hasher();
 
