@@ -16,33 +16,57 @@ class Console extends CLI
         $options->setHelp('VSkeleton Logging Framework');
 
         $options->registerOption('product:generate', 'Generate Product', null, "product_name");
+        $options->registerOption('product:wipe', 'Wipe all records related to product', null, "product_id");
         $options->registerOption('key:generate', 'Generate Access Key', null, 'product_id');
-        $options->registerOption('key:delete', 'Delete Access Key', null, 'key');
-        $options->registerOption('db:wipe', 'Wipe DB for production');
+        $options->registerOption('key:disable', 'Disable Access Key', null, 'key');
+        $options->registerOption('db:wipe', 'Wipe All Records in the DB');
     }
 
     protected function main(Options $options)
     {
         if ($options->getOpt('product:generate')) {
-            $product = Product::query()->create([
-                'name' => $options->getArgs()['0']
-            ]);
-            $this->success('Your Product is created, Id = ' . $product->id);
-        } else if ($options->getOpt('key:generate')) {
-            $key = Str::random(64);
-            $salt = Str::random(16);
+            try {
+                $repo = new ProductRepository();
+                $product = $repo->Create(['name'=>$options->getArgs()['0']]);
+                $this->success('Your Product is created, Id = ' . $product->id);
+            } catch (Exception $ex){
+                $this->error("Found a product with same name");
+            }
+        }
+        else if ($options->getOpt('product:wipe')) {
+            try {
+                $repo = new ProductRepository();
+                $result = $repo->Wipe($options->getArgs()[0]);
+                if(!$result){
+                    $this->error("Failed to delete product");
+                    return;
+                }
+                $this->success('Product deleted');
+            } catch (Exception $ex){
+                ray($ex->getMessage());
+                $this->error("Failed to wipe product");
+            }
+        }
+        else if ($options->getOpt('key:generate')) {
+            try {
+                $key = Str::random(64);
+                $salt = Str::random(16);
 
-            $repo = new AccessTokenRepository();
-            $repo->Create([
-                'key' => $key,
-                'salt' => $salt,
-                'permissions' => array('*'),
-                'whitelist_range' => array(),
-                'product_id' => $options->getArgs()['0']
-            ]);
+                $repo = new AccessTokenRepository();
+                $repo->Create([
+                    'key' => $key,
+                    'salt' => $salt,
+                    'whitelist_range' => array(),
+                    'product_id' => $options->getArgs()['0']
+                ]);
 
-            $this->success('Your access key is created: ' . $key);
-        } else if ($options->getOpt('key:delete')) {
+                $this->success('Your access key is created: ' . $key);
+            } catch (Exception $ex){
+                $this->error('Failed to create access key');
+            }
+
+        }
+        else if ($options->getOpt('key:disable')) {
             $key = $options->getArgs()['0'];
 
             if (!$key) {
@@ -52,7 +76,7 @@ class Console extends CLI
 
             $repo = new AccessTokenRepository();
 
-            $token = $repo->AuthAccessToken($key);
+            $token = $repo->GetAccessToken($key);
 
             if (!$token) {
                 $this->error('Invalid Key.');
@@ -62,24 +86,29 @@ class Console extends CLI
             $result = $repo->Delete($token->id);
 
             $this->success('Access token got deleted successfully');
-        } else if ($options->getOpt('db:wipe')) {
-
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-            UserLog::query()->truncate();
-            AdminLog::query()->truncate();
-            Product::query()->truncate();
-            AccessToken::query()->truncate();
-
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-
-            $this->success('Database got wiped successfully');
-        } else {
-            echo $options->help();
-            exit;
         }
+        else if ($options->getOpt('db:wipe')) {
+            try {
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
+                UserLog::query()->truncate();
+                AdminLog::query()->truncate();
+                Product::query()->truncate();
+                AccessToken::query()->truncate();
+
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                $this->success('DB wiped successfully');
+            } catch (Exception $x){
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                $this->success('Failed to wipe DB');
+            }
+
+
+
+        }
+        else {
+            echo $options->help();
+        }
     }
 }
 
