@@ -1,5 +1,7 @@
 <?php
 
+use Wikimedia\IPSet;
+
 class AuthHelper
 {
     public static function GetAuthHeaders()
@@ -39,9 +41,18 @@ class AuthHelper
     {
         $tokenRepo = new AccessTokenRepository();
 
-        $token = $tokenRepo->AuthAccessToken(AuthHelper::GetBearerToken());
+        $token = $tokenRepo->GetAccessToken(AuthHelper::GetBearerToken());
         if (!$token) {
             return null;
+        }
+
+        if($token->active == false){
+            return false;
+        }
+
+        $ipSet = new IPSet($token->whitelist_range);
+        if (!empty($token->whitelist_range) && !$ipSet->match(Flight::request()->ip)) {
+           return false;
         }
 
         return $token;
