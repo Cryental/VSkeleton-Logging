@@ -23,15 +23,19 @@ Generate a Product using this command:
 ```
 php ./console/commands --product:generate product_name <product_name>
 ```
+Wipe all records related to a Product using this command:
+```
+php ./console/commands --product:wipe product_id <product_id>
+```
 Generate an admin access key for specific product using this command:
 ```
 php ./console/commands --key:generate product_id <product_id>
 ```
-Delete an access key with this command:
+Disable an access key with this command:
 ```
-php ./console/commands --key:delete key <key>
+php ./console/commands --key:disable key <key>
 ```
-Also you can wipe the DB for production wih this command:
+Also you can wipe the DB wih this command:
 ```
 php ./console/commands --db:wipe
 ```
