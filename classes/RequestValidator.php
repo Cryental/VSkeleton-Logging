@@ -5,8 +5,7 @@ class RequestValidator
     public static function ValidateUserLogRequest()
     {
         $subscription_id = Flight::request()->data->subscription_id;
-        if (!is_string($subscription_id) ||
-            (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $subscription_id)) !== 1) {
+        if (!is_string($subscription_id) || (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $subscription_id)) !== 1) {
             return false;
         }
 
@@ -51,7 +50,7 @@ class RequestValidator
         }
 
         $method = Flight::request()->data->method;
-        if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
+        if (!in_array($method, ['GET', 'POST'])) {
             return false;
         }
 

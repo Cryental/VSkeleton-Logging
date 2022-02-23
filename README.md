@@ -11,7 +11,7 @@ This app is an external log service app for Volistx Skeleton.
   - openssl
 
 ### Usage
-1. Please modify `config.php` for your database and settings.
+1. Please copy `config.php.example` to `config.php` and modify `config.php` for your database and settings.
 2. Create a database in MySQL and import `table.sql`.
 3. Delete `table.sql` for the production system.
 4. Run following commands:

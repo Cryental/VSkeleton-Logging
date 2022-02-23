@@ -2,7 +2,7 @@ CREATE TABLE `products` (
                             `id` int(11) NOT NULL AUTO_INCREMENT,
                             `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                             `created_at` datetime NOT NULL,
-                            PRIMARY KEY (`id`)
+                            PRIMARY KEY (`id`),
                             UNIQUE KEY `products_UN` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -19,13 +19,11 @@ CREATE TABLE `access_tokens` (
                                  PRIMARY KEY (`id`),
                                  KEY `access_token_key` (`key`),
                                  KEY `access_tokens_FK` (`product_id`),
-                                 CONSTRAINT `access_tokens_FK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                 CONSTRAINT `permissions` CHECK (json_valid(`permissions`))
+                                 CONSTRAINT `access_tokens_FK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `admin_logs` (
-                              `id` int(11) NOT NULL AUTO_INCREMENT,
-                              `access_token_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+                              `id` int(11) NOT NULL AUTO_INCREMENT,                              `access_token_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
                               `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                               `method` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                               `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
