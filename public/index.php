@@ -42,7 +42,7 @@ Flight::route('POST /logs/admins', function () {
     }
 });
 
-Flight::route('GET /logs/admins/', function () {
+Flight::route('GET /logs/admins', function () {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
@@ -158,7 +158,6 @@ Flight::route('GET /logs/users/', function () {
             $page,
             $limit
         );
-
         Flight::json($logs);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);

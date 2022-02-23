@@ -50,7 +50,7 @@ class RequestValidator
         }
 
         $method = Flight::request()->data->method;
-        if (!in_array($method, ['GET', 'POST'])) {
+        if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
             return false;
         }
 
