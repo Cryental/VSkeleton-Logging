@@ -16,7 +16,8 @@
         "classmap": [
             "models",
             "classes",
-            "repositories"
+            "repositories",
+            "DataTransferObjects"
         ]
     }
 }
