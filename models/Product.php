@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -16,4 +17,9 @@ class Product extends Model
 
     protected $casts = [
     ];
+
+    public function accessTokens(): HasMany
+    {
+        return $this->hasMany(AccessToken::class);
+    }
 }

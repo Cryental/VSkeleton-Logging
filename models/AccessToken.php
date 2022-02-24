@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AccessToken extends Model
 {
@@ -21,4 +22,9 @@ class AccessToken extends Model
         'whitelist_range' => 'array',
         'active'          => 'boolean',
     ];
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
