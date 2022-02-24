@@ -64,9 +64,11 @@ class RequestValidator
         return ctype_digit($page) && ctype_digit($limit);
     }
 
-    public static function ValidateDate($date){
+    public static function ValidateDate($date)
+    {
         try {
             Carbon::parse($date);
+
             return true;
         } catch (Exception) {
             return false;
@@ -75,6 +77,6 @@ class RequestValidator
 
     public static function ValidateUsageRequest($date, $mode): bool
     {
-        return self::ValidateDate($date) && (in_array($mode,['detailed','focused'])) ;
+        return self::ValidateDate($date) && (in_array($mode, ['detailed', 'focused']));
     }
 }
