@@ -37,6 +37,6 @@ class AdminLogRepository
         }
 
         return $query->orderBy('created_at', 'DESC')
-            ->paginate($limit, ['*'], 'page', $page)->toArray();
+            ->paginate($limit, ['*'], 'page', $page);
     }
 }

@@ -38,7 +38,7 @@ class UserLogRepository
         }
 
         return $query->orderBy('created_at', 'DESC')
-            ->paginate($limit, ['*'], 'page', $page)->toArray();
+            ->paginate($limit, ['*'], 'page', $page);
     }
 
     public function FindSubscriptionLogs($subscription_id, $needle, $page, $limit)
@@ -57,7 +57,7 @@ class UserLogRepository
                 $query->orWhere("$column", 'LIKE', "%$needle%");
             }
         })->orderBy('user_logs.created_at', 'DESC')
-            ->paginate($limit, ['*'], 'page', $page)->toArray();
+            ->paginate($limit, ['*'], 'page', $page);
     }
 
     public function FindSubscriptionLogsCount($subscription_id, $date): int
@@ -78,6 +78,6 @@ class UserLogRepository
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->created_at)->format('j'); // grouping by days
-            })->toArray();
+            });
     }
 }
