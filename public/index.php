@@ -16,16 +16,18 @@ Flight::route('POST /logs/admins', function () {
 
         if (!$token) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
         if (!RequestValidator::ValidateAdminLogRequest()) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
 
         $adminLogRepo = new AdminLogRepository();
-        $log =$adminLogRepo->Create([
+        $log = $adminLogRepo->Create([
             'logging_access_token_id' => $token->id,
             'access_token_id'         => Flight::request()->data->access_token_id,
             'url'                     => Flight::request()->data->url,
@@ -44,6 +46,7 @@ Flight::route('GET /logs/admins', function () {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
@@ -51,12 +54,11 @@ Flight::route('GET /logs/admins', function () {
         $page = Flight::request()->query['page'] ?? '1';
         $limit = Flight::request()->query['limit'] ?? '50';
 
-
-        if (!RequestValidator::ValidatePaginatedRequest($page,$limit)) {
+        if (!RequestValidator::ValidatePaginatedRequest($page, $limit)) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
-
 
         $adminLogRepo = new AdminLogRepository();
         $logs = $adminLogRepo->FindAll(
@@ -73,8 +75,8 @@ Flight::route('GET /logs/admins', function () {
         Flight::json([
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->currentPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->currentPage(),
             ],
             'items' => $logDTOs,
         ]);
@@ -89,10 +91,12 @@ Flight::route('POST /logs/users', function () {
 
         if (!$token) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
         if (!RequestValidator::ValidateUserLogRequest()) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
 
@@ -106,7 +110,7 @@ Flight::route('POST /logs/users', function () {
             'user_agent'              => Flight::request()->data->user_agent,
         ]);
 
-        Flight::json(UserLogDTO::fromModel($log)->GetDTO(),201);
+        Flight::json(UserLogDTO::fromModel($log)->GetDTO(), 201);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
     }
@@ -116,12 +120,14 @@ Flight::route('GET /logs/users/@subscription_id/count', function ($subscription_
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
         $date = Flight::request()->query['date'] ?? Carbon::now();
 
         if (!RequestValidator::ValidateDate($date)) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
 
@@ -137,15 +143,16 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
         $needle = Flight::request()->query['search'] ?? '';
         $page = Flight::request()->query['page'] ?? '1';
         $limit = Flight::request()->query['limit'] ?? '50';
 
-
-        if (!RequestValidator::ValidatePaginatedRequest($page,$limit)) {
+        if (!RequestValidator::ValidatePaginatedRequest($page, $limit)) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
 
@@ -165,8 +172,8 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
         Flight::json([
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->lastPage(),
             ],
             'items' => $logDTOs,
         ]);
@@ -179,6 +186,7 @@ Flight::route('GET /logs/users/', function () {
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
@@ -186,9 +194,9 @@ Flight::route('GET /logs/users/', function () {
         $page = Flight::request()->query['page'] ?? '1';
         $limit = Flight::request()->query['limit'] ?? '50';
 
-
-        if (!RequestValidator::ValidatePaginatedRequest($page,$limit)) {
+        if (!RequestValidator::ValidatePaginatedRequest($page, $limit)) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
 
@@ -207,8 +215,8 @@ Flight::route('GET /logs/users/', function () {
         Flight::json([
             'pagination' => [
                 'per_page' => $logs->perPage(),
-                'current' => $logs->currentPage(),
-                'total' => $logs->lastPage(),
+                'current'  => $logs->currentPage(),
+                'total'    => $logs->lastPage(),
             ],
             'items' => $logDTOs,
         ]);
@@ -221,14 +229,16 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
     try {
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
+
             return;
         }
 
         $date = Flight::request()->query['date'] ?? Carbon::now();
-        $mode = Flight::request()->query['mode'] ?? "detailed";
+        $mode = Flight::request()->query['mode'] ?? 'detailed';
 
-        if (!RequestValidator::ValidateUsageRequest($date,$mode)) {
+        if (!RequestValidator::ValidateUsageRequest($date, $mode)) {
             Flight::json(MessagesCenter::E400(), 400);
+
             return;
         }
         $userLogRepo = new UserLogRepository();
@@ -236,7 +246,7 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
 
         $specifiedDate = Carbon::parse($date);
         $thisDate = Carbon::now();
-        $lastDay = $specifiedDate->format('Y-m') == $thisDate->format('Y-m') ? $thisDate->day : (int)$specifiedDate->format('t');
+        $lastDay = $specifiedDate->format('Y-m') == $thisDate->format('Y-m') ? $thisDate->day : (int) $specifiedDate->format('t');
 
         $totalCount = 0;
         $stats = [];
@@ -247,11 +257,10 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
             }
             $totalCount += $groupedCount;
             $stats[] = [
-                'date' => $specifiedDate->format('Y-m-') . sprintf('%02d', $i),
+                'date'  => $specifiedDate->format('Y-m-').sprintf('%02d', $i),
                 'count' => $groupedCount,
             ];
         }
-
 
         Flight::json([
             'usages' => [
