@@ -227,12 +227,10 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
         $date = Flight::request()->query['date'] ?? Carbon::now();
         $mode = Flight::request()->query['mode'] ?? "detailed";
 
-
         if (!RequestValidator::ValidateUsageRequest($date,$mode)) {
             Flight::json(MessagesCenter::E400(), 400);
             return;
         }
-
         $userLogRepo = new UserLogRepository();
         $groupedLogs = $userLogRepo->FindSubscriptionUsages($subscription_id, $date);
 
@@ -254,17 +252,15 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
             ];
         }
 
-        $requestsCount = $this->subscriptionRepository->Find($subscription_id)->plan()->first()->data['requests'];
 
         Flight::json([
             'usages' => [
                 'current' => $totalCount,
-                'max' => (int)$requestsCount,
-                'percent' => $requestsCount ? (float)number_format(($totalCount * 100) / $requestsCount, 2) : null,
             ],
             'details' => $stats,
         ]);
     } catch (Exception $ex) {
+        ray($ex->getMessage());
         Flight::json(MessagesCenter::E500(), 500);
     }
 });
