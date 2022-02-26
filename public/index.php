@@ -237,7 +237,6 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
         $mode = Flight::request()->query['mode'] ?? 'detailed';
         $requestsCount = Flight::request()->query['count'] ?? -1;
 
-        ray(Flight::request());
         if (!RequestValidator::ValidateUsageRequest($date, $mode, $requestsCount)) {
             Flight::json(MessagesCenter::E400(), 400);
 
@@ -273,7 +272,6 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
             'details' => $stats,
         ]);
     } catch (Exception $ex) {
-        ray($ex->getMessage());
         Flight::json(MessagesCenter::E500(), 500);
     }
 });

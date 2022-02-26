@@ -2,22 +2,18 @@
     "require": {
         "php": "^8.1",
         "mikecao/flight": "^2.0",
-        "illuminate/database": "^9.0",
+        "illuminate/database": "^9.2",
         "ext-openssl": "*",
         "ext-json": "*",
         "splitbrain/php-cli": "^1.1",
-        "illuminate/pagination": "^9.0",
+        "illuminate/pagination": "^9.2",
         "wikimedia/ip-set": "^3.0"
-    },
-    "require-dev": {
-        "spatie/ray": "^1.33"
     },
     "autoload": {
         "classmap": [
             "models",
             "classes",
-            "repositories",
-            "DataTransferObjects"
+            "repositories"
         ]
     }
 }
