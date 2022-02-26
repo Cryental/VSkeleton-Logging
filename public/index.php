@@ -226,8 +226,10 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
 
         $date = Flight::request()->query['date'] ?? Carbon::now();
         $mode = Flight::request()->query['mode'] ?? "detailed";
+        $requestsCount = Flight::request()->query['count'] ?? -1;
 
-        if (!RequestValidator::ValidateUsageRequest($date,$mode)) {
+        ray(Flight::request());
+        if (!RequestValidator::ValidateUsageRequest($date,$mode,$requestsCount)) {
             Flight::json(MessagesCenter::E400(), 400);
             return;
         }
@@ -252,10 +254,11 @@ Flight::route('GET /logs/users/@subscription_id/usages', function ($subscription
             ];
         }
 
-
         Flight::json([
             'usages' => [
                 'current' => $totalCount,
+                'max'     => (int) $requestsCount,
+                'percent' => $requestsCount ? (float) number_format(($totalCount * 100) / $requestsCount, 2) : null,
             ],
             'details' => $stats,
         ]);

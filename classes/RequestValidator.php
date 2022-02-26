@@ -75,8 +75,8 @@ class RequestValidator
         }
     }
 
-    public static function ValidateUsageRequest($date, $mode): bool
+    public static function ValidateUsageRequest($date, $mode, $requestCount): bool
     {
-        return self::ValidateDate($date) && (in_array($mode, ['detailed', 'focused']));
+        return self::ValidateDate($date) && (in_array($mode, ['detailed', 'focused'])) && ctype_digit($requestCount);
     }
 }
