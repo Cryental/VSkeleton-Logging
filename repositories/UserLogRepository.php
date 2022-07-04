@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class UserLogRepository
 {
@@ -41,22 +42,32 @@ class UserLogRepository
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function FindSubscriptionLogs($subscription_id, $needle, $page, $limit)
+    public function FindSubscriptionLogs($subscription_id, $search, $page, $limit)
     {
-        $columns = [
-            'logging_access_token_id',
-            'subscription_id',
-            'url',
-            'ip',
-            'method',
-            'user_agent',
-        ];
+        //handle empty search
+        if ($search === '') {
+            $search = 'id:';
+        }
 
-        return UserLog::where('subscription_id', $subscription_id)->where(function ($query) use ($columns, $needle) {
-            foreach ($columns as $column) {
-                $query->orWhere("$column", 'LIKE', "%$needle%");
-            }
-        })->orderBy('user_logs.created_at', 'DESC')
+        if (!str_contains($search, ':')) {
+            return null;
+        }
+
+        $columns = Schema::getColumnListing('user_logs');
+
+        $values = explode(':', $search, 2);
+        $columnName = strtolower(trim($values[0]));
+
+        if (!in_array($columnName, $columns)) {
+            return null;
+        }
+
+        $searchValue = strtolower(trim($values[1]));
+
+        return UserLog::query()
+            ->where('subscription_id', $subscription_id)
+            ->where($values[0], 'LIKE', "%$searchValue%")
+            ->orderBy('created_at', 'DESC')
             ->paginate($limit, ['*'], 'page', $page);
     }
 

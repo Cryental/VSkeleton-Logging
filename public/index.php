@@ -66,6 +66,9 @@ Flight::route('GET /logs/admins', function () {
             $page,
             $limit
         );
+        if(!$logs){
+            Flight::json(MessagesCenter::E400('Invalid search column'), 400);
+        }
 
         $logDTOs = [];
         foreach ($logs->items() as $log) {
@@ -164,6 +167,10 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
             $limit
         );
 
+        if(!$logs){
+            Flight::json(MessagesCenter::E400('Invalid search column'), 400);
+        }
+
         $logDTOs = [];
         foreach ($logs->items() as $log) {
             $logDTOs[] = UserLogDTO::fromModel($log)->GetDTO();
@@ -206,6 +213,10 @@ Flight::route('GET /logs/users/', function () {
             $page,
             $limit
         );
+
+        if(!$logs){
+            Flight::json(MessagesCenter::E400('Invalid search column'), 400);
+        }
 
         $logDTOs = [];
         foreach ($logs->items() as $log) {
