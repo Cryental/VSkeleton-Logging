@@ -66,7 +66,7 @@ Flight::route('GET /logs/admins', function () {
             $page,
             $limit
         );
-        if(!$logs){
+        if (!$logs) {
             Flight::json(MessagesCenter::E400('Invalid search column'), 400);
         }
 
@@ -167,7 +167,7 @@ Flight::route('GET /logs/users/@subscription_id', function ($subscription_id) {
             $limit
         );
 
-        if(!$logs){
+        if (!$logs) {
             Flight::json(MessagesCenter::E400('Invalid search column'), 400);
         }
 
@@ -214,7 +214,7 @@ Flight::route('GET /logs/users/', function () {
             $limit
         );
 
-        if(!$logs){
+        if (!$logs) {
             Flight::json(MessagesCenter::E400('Invalid search column'), 400);
         }
 
