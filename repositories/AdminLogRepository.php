@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class AdminLogRepository
 {
@@ -32,7 +32,7 @@ class AdminLogRepository
             return null;
         }
 
-        $columns = Schema::getColumnListing('admin_logs');
+        $columns = DB::schema('default')->getColumnListing('admin_logs');
 
         $values = explode(':', $search, 2);
         $columnName = strtolower(trim($values[0]));

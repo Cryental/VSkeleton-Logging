@@ -1,7 +1,8 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Schema;
+
+use Illuminate\Database\Capsule\Manager as DB;
 
 class UserLogRepository
 {
@@ -53,7 +54,7 @@ class UserLogRepository
             return null;
         }
 
-        $columns = Schema::getColumnListing('user_logs');
+        $columns = DB::schema('default')->getColumnListing('user_logs');
 
         $values = explode(':', $search, 2);
         $columnName = strtolower(trim($values[0]));
