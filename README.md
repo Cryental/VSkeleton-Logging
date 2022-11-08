@@ -1,4 +1,4 @@
-# Volistx Skeleton Logging App
+# Volistx Framework Logging Service
 
 This app is an external log service app for Volistx Skeleton.
 
