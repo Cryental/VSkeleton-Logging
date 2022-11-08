@@ -1,7 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-
 use Illuminate\Database\Capsule\Manager as DB;
 
 class UserLogRepository
