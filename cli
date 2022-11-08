@@ -2,7 +2,7 @@
 <?php
 const LOGGING_START = true;
 
-require __DIR__ . '/../init.php';
+require __DIR__ . '/init.php';
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Str;
@@ -13,13 +13,14 @@ class Console extends CLI
 {
     protected function Setup(Options $options)
     {
-        $options->setHelp('VSkeleton Logging Framework');
+        $options->setHelp('Volistx Framework Logging Service');
 
+        $options->registerOption('db:install', 'Install Database Schema');
+        $options->registerOption('db:wipe', 'Wipe All Records in the DB');
         $options->registerOption('product:generate', 'Generate Product', null, "product_name");
-        $options->registerOption('product:wipe', 'Wipe all records related to product', null, "product_id");
+        $options->registerOption('product:wipe', 'Wipe All Records Related to Product', null, "product_id");
         $options->registerOption('key:generate', 'Generate Access Key', null, 'product_id');
         $options->registerOption('key:disable', 'Disable Access Key', null, 'key');
-        $options->registerOption('db:wipe', 'Wipe All Records in the DB');
     }
 
     protected function main(Options $options)
@@ -28,9 +29,9 @@ class Console extends CLI
             try {
                 $repo = new ProductRepository();
                 $product = $repo->Create(['name'=>$options->getArgs()['0']]);
-                $this->success('Your Product is created, Id = ' . $product->id);
+                $this->success('Your product is created, ID = ' . $product->id);
             } catch (Exception $ex){
-                $this->error("Found a product with same name");
+                $this->error("Found a product with same name.");
             }
         }
         else if ($options->getOpt('product:wipe')) {
@@ -38,13 +39,12 @@ class Console extends CLI
                 $repo = new ProductRepository();
                 $result = $repo->Wipe($options->getArgs()[0]);
                 if(!$result){
-                    $this->error("Failed to delete product");
+                    $this->error("Failed to delete product.");
                     return;
                 }
-                $this->success('Product deleted');
+                $this->success('Product deleted.');
             } catch (Exception $ex){
-                ray($ex->getMessage());
-                $this->error("Failed to wipe product");
+                $this->error("Failed to wipe product.");
             }
         }
         else if ($options->getOpt('key:generate')) {
@@ -62,9 +62,8 @@ class Console extends CLI
 
                 $this->success('Your access key is created: ' . $key);
             } catch (Exception $ex){
-                $this->error('Failed to create access key');
+                $this->error('Failed to create access key.');
             }
-
         }
         else if ($options->getOpt('key:disable')) {
             $key = $options->getArgs()['0'];
@@ -79,15 +78,23 @@ class Console extends CLI
             $token = $repo->GetAccessToken($key);
 
             if (!$token) {
-                $this->error('Invalid Key.');
+                $this->error('Failed to find your access key.');
                 return;
             }
 
-            $result = $repo->Delete($token->id);
+            $repo->Delete($token->id);
 
-            $this->success('Access token got deleted successfully');
+            $this->success('Your access key is deleted.');
         }
-        else if ($options->getOpt('db:wipe')) {
+        else if ($options->getOpt('db:install')) {
+            try {
+                DB::unprepared(file_get_contents(__DIR__ . '/schema.sql'));
+                $this->success('Database schema installed successfully.');
+            } catch (Exception $x) {
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                $this->fatal('Failed to install database schema.');
+            }
+        } else if ($options->getOpt('db:wipe')) {
             try {
                 DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
@@ -97,14 +104,11 @@ class Console extends CLI
                 AccessToken::query()->truncate();
 
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-                $this->success('DB wiped successfully');
+                $this->success('Database wiped successfully.');
             } catch (Exception $x){
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-                $this->success('Failed to wipe DB');
+                $this->fatal('Failed to wipe database.');
             }
-
-
-
         }
         else {
             echo $options->help();
