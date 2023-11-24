@@ -13,6 +13,7 @@ class UserLog extends Model
     protected $fillable = [
         'logging_access_token_id',
         'subscription_id',
+        'user_id',
         'url',
         'method',
         'ip',

@@ -23,6 +23,9 @@
         "illuminate/pagination": "9.0",
         "wikimedia/ip-set": "^3.0"
     },
+    "require-dev": {
+        "spatie/ray": "^1.00"
+    },
     "autoload": {
         "classmap": [
             "models",

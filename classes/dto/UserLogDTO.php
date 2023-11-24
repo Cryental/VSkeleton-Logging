@@ -4,6 +4,7 @@ class UserLogDTO extends DataTransferObjectBase
 {
     public string $subscription_id;
     public string $id;
+    public string $user_id;
     public string $url;
     public string $ip;
     public string $method;
@@ -18,13 +19,14 @@ class UserLogDTO extends DataTransferObjectBase
     public function GetDTO(): array
     {
         return [
-            'id'           => $this->id,
+            'id' => $this->id,
+            'user_id' => $this->user_id,
             'subscription' => [
                 'id' => $this->subscription_id,
             ],
-            'url'        => $this->url,
-            'ip'         => $this->ip,
-            'method'     => $this->method,
+            'url' => $this->url,
+            'ip' => $this->ip,
+            'method' => $this->method,
             'user_agent' => $this->user_agent,
             'created_at' => $this->created_at,
         ];

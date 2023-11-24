@@ -43,6 +43,7 @@ CREATE TABLE `admin_logs`
 CREATE TABLE `user_logs`
 (
     `id`                      int(11) NOT NULL AUTO_INCREMENT,
+    `user_id`                 char(36) COLLATE utf8mb4_unicode_ci     NOT NULL,
     `subscription_id`         char(36) COLLATE utf8mb4_unicode_ci     NOT NULL,
     `url`                     varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
     `method`                  varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,

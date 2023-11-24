@@ -6,6 +6,7 @@ class AdminLogDTO extends DataTransferObjectBase
     public string $logging_access_token_id;
 
     public string $id;
+    public string $user_id;
     public string $url;
     public string $ip;
     public string $method;
@@ -21,6 +22,7 @@ class AdminLogDTO extends DataTransferObjectBase
     {
         return [
             'id'           => $this->id,
+            'user_id'           => $this->user_id,
             'access_token' => [
                 'id' => $this->access_token_id,
             ],
