@@ -7,7 +7,8 @@ class RequestValidator
     public static function ValidateUserLogRequest(): bool
     {
         $subscription_id = Flight::request()->data->subscription_id;
-        if (!is_string($subscription_id) || (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $subscription_id)) !== 1) {
+
+        if (!is_string($subscription_id) || (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $subscription_id)) !== 1) {
             return false;
         }
 
@@ -35,7 +36,7 @@ class RequestValidator
     {
         $access_token_id = Flight::request()->data->access_token_id;
         if (!is_string($access_token_id) ||
-            (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $access_token_id)) !== 1) {
+            (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $access_token_id)) !== 1) {
             return false;
         }
 

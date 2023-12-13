@@ -121,7 +121,6 @@ Flight::route('POST /users/logs', function () {
 
             return;
         }
-
         $userLogRepo = new UserLogRepository();
         $log = $userLogRepo->Create([
             'logging_access_token_id' => $token->id,
@@ -132,9 +131,10 @@ Flight::route('POST /users/logs', function () {
             'method' => Flight::request()->data->method,
             'user_agent' => Flight::request()->data->user_agent,
         ]);
-
+ray($log);
         Flight::json(UserLogDTO::fromModel($log)->GetDTO(), 201);
     } catch (Exception $ex) {
+        ray($ex);
         Flight::json(MessagesCenter::E500(), 500);
     }
 });

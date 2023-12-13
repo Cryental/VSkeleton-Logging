@@ -21,7 +21,8 @@
         "ext-json": "*",
         "splitbrain/php-cli": "^1.1",
         "illuminate/pagination": "9.0",
-        "wikimedia/ip-set": "^3.0"
+        "wikimedia/ip-set": "^3.0",
+        "elgibor-solution/laravel-database-encryption": "^1.1"
     },
     "require-dev": {
         "spatie/ray": "^1.00"
