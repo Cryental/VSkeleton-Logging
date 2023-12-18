@@ -45,7 +45,7 @@ class UserLogRepository
 
         $searchValue = strtolower(trim($values[1]));
 
-        return AdminLog::query()
+        return UserLog::query()
             ->where($values[0], 'LIKE', "%$searchValue%")
             ->orderBy('created_at', 'DESC')
             ->paginate($limit, ['*'], 'page', $page);

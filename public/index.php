@@ -20,11 +20,6 @@ Flight::route('POST /admins/logs', function () {
             return;
         }
 
-        if (!RequestValidator::ValidateAdminLogRequest()) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
 
         $adminLogRepo = new AdminLogRepository();
         $log = $adminLogRepo->Create([
@@ -52,12 +47,6 @@ Flight::route('GET  /admins/logs', function () {
         $search = Flight::request()->query['search'] ?? '';
         $page = Flight::request()->query['page'] ?? '1';
         $limit = Flight::request()->query['limit'] ?? '50';
-
-        if (!RequestValidator::ValidatePaginatedRequest($page, $limit)) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
 
         $adminLogRepo = new AdminLogRepository();
         $logs = $adminLogRepo->FindAll(
@@ -105,17 +94,20 @@ Flight::route('GET  /admins/logs/@log_id', function ($log_id) {
 Flight::route('POST /users/logs', function () {
     try {
         $token = AuthHelper::Auth();
-
         if (!$token) {
             Flight::json(MessagesCenter::E401(), 401);
 
             return;
         }
-        if (!RequestValidator::ValidateUserLogRequest()) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
+        ray([
+            'logging_access_token_id' => $token->id,
+            'subscription_id' => Flight::request()->data->subscription_id,
+            'user_id' => Flight::request()->data->user_id,
+            'url' => Flight::request()->data->url,
+            'ip' => Flight::request()->data->ip,
+            'method' => Flight::request()->data->method,
+            'user_agent' => Flight::request()->data->user_agent,
+        ]);
         $userLogRepo = new UserLogRepository();
         $log = $userLogRepo->Create([
             'logging_access_token_id' => $token->id,
@@ -135,6 +127,7 @@ Flight::route('POST /users/logs', function () {
 });
 Flight::route('GET /users/logs', function () {
     try {
+        ray('here');
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
 
@@ -144,14 +137,8 @@ Flight::route('GET /users/logs', function () {
         $needle = Flight::request()->query['search'] ?? '';
         $page = Flight::request()->query['page'] ?? '1';
         $limit = Flight::request()->query['limit'] ?? '50';
-
-        if (!RequestValidator::ValidatePaginatedRequest($page, $limit)) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
-
         $userLogRepo = new UserLogRepository();
+
         $logs = $userLogRepo->FindAll(
             $needle,
             $page,
@@ -204,12 +191,6 @@ Flight::route('GET /users/@user_id/subscriptions/@subscription_id/count', functi
         }
         $date = Flight::request()->query['date'] ?? Carbon::now();
 
-        if (!RequestValidator::ValidateDate($date)) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
-
         $userLogRepo = new UserLogRepository();
         $count = $userLogRepo->FindSubscriptionLogsCount($user_id, $subscription_id, Carbon::parse($date));
         Flight::json($count);
@@ -227,12 +208,6 @@ Flight::route('GET /users/@user_id/subscriptions/@subscription_id', function ($u
         $needle = Flight::request()->query['search'] ?? '';
         $page = Flight::request()->query['page'] ?? '1';
         $limit = Flight::request()->query['limit'] ?? '50';
-
-        if (!RequestValidator::ValidatePaginatedRequest($page, $limit)) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
 
         $userLogRepo = new UserLogRepository();
         $logs = $userLogRepo->FindSubscriptionLogs(
@@ -271,11 +246,6 @@ Flight::route('GET /users/@user_id/subscriptions/@subscription_id/usages', funct
         $mode = Flight::request()->query['mode'] ?? 'detailed';
         $requestsCount = Flight::request()->query['count'] ?? -1;
 
-        if (!RequestValidator::ValidateUsageRequest($date, $mode, $requestsCount)) {
-            Flight::json(MessagesCenter::E400(), 400);
-
-            return;
-        }
         $userLogRepo = new UserLogRepository();
         $groupedLogs = $userLogRepo->FindSubscriptionUsages($user_id, $subscription_id, $date);
 
