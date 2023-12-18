@@ -12,6 +12,10 @@ date_default_timezone_set($config['timezone'] ?? 'UTC');
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Pagination\Paginator;
 
+Flight::register('db', 'PDO', array('mysql:host=hostingmysql299.nominalia.com;dbname=budainteractiu', 'F538317_budafilm', '@Buda#Int2015'), function ($db) {
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+});
+
 $capsule = new Capsule();
 
 $capsule->addConnection([

@@ -36,7 +36,7 @@ Flight::route('POST /admins/logs', function () {
             'user_agent' => Flight::request()->data->user_agent,
         ]);
 
-        Flight::json(AdminLogDTO::fromModel($log)->GetDTO(), 201);
+        Flight::json($log, 201);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
     }
@@ -69,18 +69,13 @@ Flight::route('GET  /admins/logs', function () {
             Flight::json(MessagesCenter::E400('Invalid search column'), 400);
         }
 
-        $logDTOs = [];
-        foreach ($logs->items() as $log) {
-            $logDTOs[] = AdminLogDTO::fromModel($log)->GetDTO();
-        }
-
         Flight::json([
             'pagination' => [
                 'per_page' => $logs->perPage(),
                 'current' => $logs->currentPage(),
                 'total' => $logs->currentPage(),
             ],
-            'items' => $logDTOs,
+            'items' => $logs->items(),
         ]);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
@@ -101,7 +96,7 @@ Flight::route('GET  /admins/logs/@log_id', function ($log_id) {
             Flight::json(MessagesCenter::E404(), 400);
         }
 
-        Flight::json(AdminLogDTO::fromModel($log)->GetDTO(), 200);
+        Flight::json($log, 200);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
     }
@@ -131,8 +126,8 @@ Flight::route('POST /users/logs', function () {
             'method' => Flight::request()->data->method,
             'user_agent' => Flight::request()->data->user_agent,
         ]);
-ray($log);
-        Flight::json(UserLogDTO::fromModel($log)->GetDTO(), 201);
+
+        Flight::json($log, 201);
     } catch (Exception $ex) {
         ray($ex);
         Flight::json(MessagesCenter::E500(), 500);
@@ -167,18 +162,13 @@ Flight::route('GET /users/logs', function () {
             Flight::json(MessagesCenter::E400('Invalid search column'), 400);
         }
 
-        $logDTOs = [];
-        foreach ($logs->items() as $log) {
-            $logDTOs[] = UserLogDTO::fromModel($log)->GetDTO();
-        }
-
         Flight::json([
             'pagination' => [
                 'per_page' => $logs->perPage(),
                 'current' => $logs->currentPage(),
                 'total' => $logs->lastPage(),
             ],
-            'items' => $logDTOs,
+            'items' => $logs->items(),
         ]);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
@@ -199,7 +189,7 @@ Flight::route('GET  /users/logs/@log_id', function ($log_id) {
             Flight::json(MessagesCenter::E404(), 400);
         }
 
-        Flight::json(UserLogDTO::fromModel($log)->GetDTO(), 200);
+        Flight::json($log, 200);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
     }
@@ -257,18 +247,13 @@ Flight::route('GET /users/@user_id/subscriptions/@subscription_id', function ($u
             Flight::json(MessagesCenter::E400('Invalid search column'), 400);
         }
 
-        $logDTOs = [];
-        foreach ($logs->items() as $log) {
-            $logDTOs[] = UserLogDTO::fromModel($log)->GetDTO();
-        }
-
         Flight::json([
             'pagination' => [
                 'per_page' => $logs->perPage(),
                 'current' => $logs->currentPage(),
                 'total' => $logs->lastPage(),
             ],
-            'items' => $logDTOs,
+            'items' => $logs->items(),
         ]);
     } catch (Exception $ex) {
         Flight::json(MessagesCenter::E500(), 500);
