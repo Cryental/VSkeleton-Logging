@@ -4,7 +4,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdminLog extends Model
 {
-
     protected $table = 'admin_logs';
 
     const UPDATED_AT = null;
@@ -12,6 +11,7 @@ class AdminLog extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'id',
         'logging_access_token_id',
         'access_token_id',
         'url',

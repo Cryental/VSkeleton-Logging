@@ -2,19 +2,21 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as DB;
+use Ulid\Ulid;
 
 class UserLogRepository
 {
     public function Create(array $inputs)
     {
         return UserLog::query()->create([
+            'id' => ULIDHelper::GetULID(),
             'logging_access_token_id' => $inputs['logging_access_token_id'],
             'subscription_id' => $inputs['subscription_id'],
             'url' => $inputs['url'],
             'user_id' => $inputs['user_id'],
             'ip' => $inputs['ip'],
             'method' => $inputs['method'],
-            'user_agent' => $inputs['user_agent'],
+            'user_agent' => $inputs['user_agent']
         ]);
     }
 

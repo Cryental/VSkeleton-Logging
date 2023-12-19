@@ -99,15 +99,7 @@ Flight::route('POST /users/logs', function () {
 
             return;
         }
-        ray([
-            'logging_access_token_id' => $token->id,
-            'subscription_id' => Flight::request()->data->subscription_id,
-            'user_id' => Flight::request()->data->user_id,
-            'url' => Flight::request()->data->url,
-            'ip' => Flight::request()->data->ip,
-            'method' => Flight::request()->data->method,
-            'user_agent' => Flight::request()->data->user_agent,
-        ]);
+
         $userLogRepo = new UserLogRepository();
         $log = $userLogRepo->Create([
             'logging_access_token_id' => $token->id,
@@ -127,7 +119,6 @@ Flight::route('POST /users/logs', function () {
 });
 Flight::route('GET /users/logs', function () {
     try {
-        ray('here');
         if (!AuthHelper::Auth()) {
             Flight::json(MessagesCenter::E401(), 401);
 
